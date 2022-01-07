@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
+import LogoutButton from '../components/LogoutButton'
 
 
 const NavBar = () => {
@@ -122,9 +123,10 @@ const NavBar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            <MenuItem key='profile_menu_item' onClick={handleCloseNavMenu} component={Link} to="/">
+                            <MenuItem key='profile_menu_item' onClick={handleCloseUserMenu} component={Link} to="/profile">
                                 <Typography textAlign="center">Profile</Typography>
                             </MenuItem>
+                            <LogoutButton />
                         </Menu>
                     </Box>
                 </Toolbar>
