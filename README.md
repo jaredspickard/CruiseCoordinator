@@ -14,14 +14,18 @@ Trip/Vehicle Logistics
 ### Frontend
 
 React
+
 Material-UI
 
 ### Backend
 
 Flask
+
 Flask SQLAlchemy
+
 Flask Praetorian
-Postgres
+
+PostgreSQL
 
 ### Authentication
 
@@ -30,7 +34,9 @@ Google Identity
 ### Deployment (probably)
 
 NGINX
+
 Docker
+
 Google App Engine
 
 ## Special Thanks
