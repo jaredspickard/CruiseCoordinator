@@ -5,6 +5,7 @@ CruiseCoordinator is a full-stack web app designed to simplify the process of co
 ## Features
 
 Profile Management
+
 Trip/Vehicle Logistics
 
 ... I'll elaborate on these features more as I continue to develop them
