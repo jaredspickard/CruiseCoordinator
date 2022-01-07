@@ -1,11 +1,7 @@
 from api import app
 import flask
-from google.oauth2 import id_token
-from google.auth.transport import requests
 
-
-GOOGLE_CLIENT_ID = '301139010020-rm1mnr8dlnd3656lt8j5f1gv6o001uv6.apps.googleusercontent.com'
-
+from api.services import Services
 
 # Set up some routes for the example
 @app.route('/api/')
@@ -13,17 +9,20 @@ def home():
     return {"Hello": "World"}, 200
 
 
-@app.route('/api/authenticate/google', methods=['POST'])
-def google_auth():
-    """ Logs in a user by parsing a POST request containing a Google Token ID. """
+@app.route('/api/login/google', methods=['POST'])
+def google_login():
+    """ Logs in a Cruiser by parsing a POST request containing a Google Token ID. 
+    
+    If a Cruiser does not exist with the fetched (google) user_id, one is created. 
+    Returns a JWT for the logged-in Cruiser. """
     try:
         req = flask.request.get_json(force=True)
         token = req.get('token', None)
-        id_info = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
-        user_id = id_info['sub']
-        ret = {'user_id': user_id}
+        google_user_id = Services.get_google_user_id(token)
+        cruiser_jwt = Services.get_cruiser_jwt_by_google_id(google_user_id)
+        ret = {'access_token': cruiser_jwt}
     except ValueError:
-        ret = {'user_id': None}
+        ret = {'access_token': None}
     return ret, 200
 
   
