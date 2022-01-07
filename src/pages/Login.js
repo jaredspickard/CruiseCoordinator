@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom'
-import Button from '@material-ui/core/Button';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { GoogleLogin } from 'react-google-login';
+import { isAuthenticated } from '../auth/AuthFunctions';
 
 const googleClientId = '301139010020-rm1mnr8dlnd3656lt8j5f1gv6o001uv6.apps.googleusercontent.com'
 
@@ -14,14 +14,9 @@ class Login extends React.Component {
     }
 
     async handleLogin(googleData) {
-        console.log('successful login');
-        console.log(googleData);
-
-        // TODO: figure out if we want to automatically create user accounts
-        // or redirect them to a page to create their own account
 
         // fetch user data for our backend 
-        const resp = await fetch('/api/authenticate/google', {
+        const resp = await fetch('/api/login/google', {
             method: 'POST',
             body: JSON.stringify({
                 token: googleData.tokenId
@@ -32,18 +27,23 @@ class Login extends React.Component {
         })
         //store the user in the client
         const data = await resp.json();
-        console.log(data);
-        // TODO: figure out how to store the user
+        if (data) {
+            const token = data['access_token']
+            localStorage.setItem('CruiserToken', token);
+            this.setState({});
+        }
     }
 
     async handleLoginFailure(err) {
-        console.log('failed login');
+        console.log('Failed to login');
         console.log(err);
     }
 
     render() {
 
-        if (false) {
+        const auth = isAuthenticated();
+
+        if (auth) {
             return <Navigate to='/' />
         } else {
             return (

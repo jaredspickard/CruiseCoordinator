@@ -10,6 +10,7 @@ import Login from '../pages/Login';
 import Home from '../pages/Home';
 import Trips from '../pages/Trips';
 import About from '../pages/About';
+import ProtectedRoute from '../auth/ProtectedRoute';
 
 class Main extends Component {
 
@@ -22,9 +23,9 @@ class Main extends Component {
             <Router>
                 <Routes>
                     <Route path="login" element={<Login />}></Route>
-                    <Route path="/" element={<Home />}></Route>
-                    <Route path="/trips" element={<Trips />}></Route>
-                    <Route path="/about" element={<About />}></Route>
+                    <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>}></Route>
+                    <Route path="/trips" element={<ProtectedRoute><Trips /></ProtectedRoute>}></Route>
+                    <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>}></Route>
                 </Routes>
             </Router>
         );
