@@ -1,5 +1,6 @@
-from api import app
+from api import app, guard
 import flask
+import flask_praetorian
 
 from api.services import Services
 
@@ -24,6 +25,13 @@ def google_login():
     except ValueError:
         ret = {'access_token': None}
     return ret, 200
+
+
+@app.route('/api/protected')
+@flask_praetorian.auth_required
+def protected():
+    return {'message': 'successful access'}
+    # return {'message': f'protected endpoint (allowed user {flask_praetorian.current_user().username})'}
 
   
 # @app.route('/api/login', methods=['POST'])
