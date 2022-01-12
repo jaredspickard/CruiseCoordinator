@@ -7,11 +7,20 @@ class Home extends React.Component {
 
     constructor(props) {
         super(props);
-        this.testProtected = this.testProtected.bind(this);
+        this.testTripCreation = this.testTripCreation.bind(this);
     }
 
-    testProtected() {
-        authFetch('/api/protected').then(resp => console.log(resp));
+    testTripCreation() {
+        const data = {};
+        data['method'] = 'POST';
+        data['body'] = JSON.stringify({
+            token: 'token'
+        });
+        data['headers'] = {
+            'Content-Type': 'application/json'
+        };
+        // authFetch('/api/trips/create', data).then(resp => console.log(resp));
+        fetch('/api/trips/create', data).then(resp => console.log(resp));
     }
 
     render() {
@@ -19,7 +28,7 @@ class Home extends React.Component {
             <div>
                 <NavBar />
                 <h2>Home Page</h2>
-                <Button onClick={() => this.testProtected()}>Test Protected API</Button>
+                <Button onClick={() => this.testTripCreation()}>Create Trip</Button>
             </div>
         )
     }

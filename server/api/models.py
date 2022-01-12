@@ -1,7 +1,9 @@
-from api import db
+from flask_login import UserMixin
+
+from api import db, login
 
 
-class Cruiser(db.Model):
+class Cruiser(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     google_user_id = db.Column(db.Integer, index=True, unique=True)
 
@@ -29,6 +31,17 @@ class Cruiser(db.Model):
     @classmethod
     def get_by_google_id(cls, user_id):
         return cls.query.filter_by(google_user_id=user_id).first()
+
+
+@login.user_loader
+def load_user(id):
+    return Cruiser.query.get(int(id))
+
+
+class Trip(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    trip_name = db.Column(db.Text)
+    coordinator_id = db.Column(db.Integer, db.ForeignKey('cruiser.id'))
 
 
 class User(db.Model):

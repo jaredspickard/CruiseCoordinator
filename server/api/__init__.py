@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from flask_praetorian import Praetorian
 from flask_cors import CORS
 from config import Config
@@ -10,13 +11,14 @@ app.debug = True
 app.config.from_object(Config)
 
 db = SQLAlchemy()
+login = LoginManager(app)
 guard = Praetorian()
 cors = CORS()
 
 from api import routes, models
 
 db.init_app(app)
-guard.init_app(app, models.User)
+guard.init_app(app, models.Cruiser)
 cors.init_app(app)
 
 # Add users for the example

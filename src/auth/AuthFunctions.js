@@ -16,6 +16,7 @@ const getAuthToken = () => {
 }
 
 const authFetch = async (url, data={}) => {
+    console.log(url)
     // set the auth token in the header
     const authToken = localStorage.getItem('CruiserToken');
     if (!authToken) {
@@ -27,6 +28,7 @@ const authFetch = async (url, data={}) => {
     }
     const headers = data['headers'];
     headers['Authorization'] = 'Bearer ' + authToken;
+    console.log(data)
     return fetch(url, data).then(async resp => {
         if (resp.status === 401) {
             console.log('Unauthorized Request');

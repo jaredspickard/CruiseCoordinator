@@ -13,7 +13,7 @@ class Login extends React.Component {
         this.handleLoginFailure = this.handleLoginFailure.bind(this);
     }
 
-    async handleLogin(googleData) {
+    async handleLoginOld(googleData) {
 
         // fetch user data for our backend 
         const resp = await fetch('/api/login/google', {
@@ -30,6 +30,26 @@ class Login extends React.Component {
         if (data) {
             const token = data['access_token']
             localStorage.setItem('CruiserToken', token);
+            this.setState({});
+        }
+    }
+
+    async handleLogin(googleData) {
+        // fetch user data for our backend 
+        const resp = await fetch('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({
+                token: googleData.tokenId
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        //store the user in the client
+        const data = await resp.json();
+        if (data) {
+            console.log(data);
+            localStorage.setItem('CruiserToken', 'fakeToken');
             this.setState({});
         }
     }

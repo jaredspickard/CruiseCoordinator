@@ -1,7 +1,7 @@
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from api.models import Cruiser
+from api.models import Cruiser, Trip
 from api import db, guard
 
 
@@ -38,3 +38,11 @@ class Services:
         cruiser = Services.get_or_create_cruiser(google_id)
         jwt = guard.encode_jwt_token(cruiser)
         return jwt
+
+    @staticmethod
+    def create_trip(cruiser_id, trip_name):
+        trip = Trip(coordinator_id=cruiser_id, trip_name=trip_name)
+        print(trip)
+        db.session.add(trip)
+        db.session.commit()
+        return trip
