@@ -1,7 +1,5 @@
 import React from 'react';
-import NavBar from '../components/NavBar'
 import { Button } from '@mui/material';
-import { authFetch } from '../auth/AuthFunctions'
 
 class Home extends React.Component {
 
@@ -26,7 +24,6 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <NavBar />
                 <h2>Home Page</h2>
                 <Button onClick={() => this.testTripCreation()}>Create Trip</Button>
             </div>

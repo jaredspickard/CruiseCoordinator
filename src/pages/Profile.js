@@ -5,7 +5,6 @@ class Profile extends React.Component {
     render() {
         return (
             <div>
-                <NavBar />
                 <h2>Profile Page</h2>
             </div>
         )

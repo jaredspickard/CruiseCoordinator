@@ -2,7 +2,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 
 from api.models import Cruiser, Trip
-from api import db, guard
+from api import db#, guard
 
 
 GOOGLE_CLIENT_ID = '301139010020-rm1mnr8dlnd3656lt8j5f1gv6o001uv6.apps.googleusercontent.com'
@@ -15,6 +15,7 @@ class Services:
     def get_google_user_id(token):
         """ Fetch Google User ID from the given token. """
         id_info = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
+        print(id_info)
         google_user_id = id_info.get('sub')
         return google_user_id
 
@@ -36,7 +37,7 @@ class Services:
         
         Creates a Cruiser if one does not exist with this user_id. """
         cruiser = Services.get_or_create_cruiser(google_id)
-        jwt = guard.encode_jwt_token(cruiser)
+        jwt = None#guard.encode_jwt_token(cruiser)
         return jwt
 
     @staticmethod

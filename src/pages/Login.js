@@ -1,87 +1,38 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom'
+
+import '../index.css'
+
+import { Navigate } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
-import { isAuthenticated } from '../auth/AuthFunctions';
+import { useAuth } from '../auth/Authentication';
 
 const googleClientId = '301139010020-rm1mnr8dlnd3656lt8j5f1gv6o001uv6.apps.googleusercontent.com'
 
-class Login extends React.Component {
+function handleLoginFailure(err) {
+    console.log('failed to log in');
+    console.log(err);
+}
 
-    constructor(props) {
-        super(props);
-        this.handleLogin = this.handleLogin.bind(this);
-        this.handleLoginFailure = this.handleLoginFailure.bind(this);
-    }
+function Login() {
 
-    async handleLoginOld(googleData) {
+    const { authed, login } = useAuth();
 
-        // fetch user data for our backend 
-        const resp = await fetch('/api/login/google', {
-            method: 'POST',
-            body: JSON.stringify({
-                token: googleData.tokenId
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        //store the user in the client
-        const data = await resp.json();
-        if (data) {
-            const token = data['access_token']
-            localStorage.setItem('CruiserToken', token);
-            this.setState({});
-        }
-    }
-
-    async handleLogin(googleData) {
-        // fetch user data for our backend 
-        const resp = await fetch('/api/login', {
-            method: 'POST',
-            body: JSON.stringify({
-                token: googleData.tokenId
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        //store the user in the client
-        const data = await resp.json();
-        if (data) {
-            console.log(data);
-            localStorage.setItem('CruiserToken', 'fakeToken');
-            this.setState({});
-        }
-    }
-
-    async handleLoginFailure(err) {
-        console.log('Failed to login');
-        console.log(err);
-    }
-
-    render() {
-
-        const auth = isAuthenticated();
-
-        if (auth) {
-            return <Navigate to='/' />
-        } else {
-            return (
-                <div>
-                    <h2>Login Page</h2>
-                    <div>
-                        <GoogleLogin
-                            clientId={googleClientId}
-                            buttonText='Login with Google'
-                            onSuccess={this.handleLogin}
-                            onFailure={this.handleLoginFailure}
-                            cookiePolicy={'single_host_origin'}
-                        />
-                    </div>
-                </div>
-            )
-        }
-    }
+    return (
+        <div>
+            {authed ? (<Navigate to='/' />) : (
+                <>
+                    <h2>Log in Page</h2>
+                    <GoogleLogin
+                        clientId={googleClientId}
+                        buttonText='Sign In with Google'
+                        onSuccess={login}
+                        onFailure={handleLoginFailure}
+                        cookiePolicy={'single_host_origin'}
+                    />
+                </>
+            )}
+        </div>
+    );
 }
 
 export default Login;

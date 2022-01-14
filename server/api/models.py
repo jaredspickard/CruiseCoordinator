@@ -8,27 +8,6 @@ class Cruiser(UserMixin, db.Model):
     google_user_id = db.Column(db.Integer, index=True, unique=True)
 
     @classmethod
-    def lookup(cls, username):
-        # TODO
-        return None
-
-    @classmethod
-    def identify(cls, id):
-        return cls.query.get(id)
-
-    @property
-    def rolenames(self):
-        return []
-
-    @property
-    def password(self):
-        return ''
-
-    @property
-    def identity(self):
-        return self.id
-
-    @classmethod
     def get_by_google_id(cls, user_id):
         return cls.query.filter_by(google_user_id=user_id).first()
 
