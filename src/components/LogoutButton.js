@@ -8,7 +8,7 @@ const LogoutButton = () => {
     const { logout } = useAuth();
 
     return (
-        <MenuItem key='logout_button' onClick={logout} component={Link} to="/login">
+        <MenuItem key='logout_button' onClick={logout} component={Link} to="/">
             <Typography textAlign="center">Logout</Typography>
         </MenuItem>
     );

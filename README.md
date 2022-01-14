@@ -24,11 +24,11 @@ Flask
 
 Flask SQLAlchemy
 
-Flask Praetorian
-
 PostgreSQL
 
 ### Authentication
+
+Flask-Login
 
 Google Identity
 
@@ -38,7 +38,7 @@ NGINX
 
 Docker
 
-Google App Engine
+AWS
 
 ## Special Thanks
 
@@ -47,3 +47,5 @@ I kicked this project off with a ton of help from the following blogs/repos, so 
 https://yasoob.me/posts/how-to-setup-and-deploy-jwt-auth-using-react-and-flask/
 
 https://blog.prototypr.io/how-to-build-google-login-into-a-react-app-and-node-express-api-821d049ee670
+
+https://www.jeffedmondson.dev/blog/react-protected-routes/

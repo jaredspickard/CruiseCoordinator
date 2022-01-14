@@ -13,9 +13,15 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import LogoutButton from '../components/LogoutButton'
+import { useAuth } from '../auth/Authentication';
+import LoginModal from './LoginModal';
+import SignUpModal from './SignUpModal';
 
 
 const NavBar = () => {
+
+    const { authed } = useAuth();
+
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -76,8 +82,8 @@ const NavBar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            <MenuItem key="home_page" onClick={handleCloseNavMenu} component={Link} to="/">
-                                <Typography textAlign="center">Home</Typography>
+                            <MenuItem key="dashboard_page" onClick={handleCloseNavMenu} component={Link} to="/dashboard">
+                                <Typography textAlign="center">Dashboard</Typography>
                             </MenuItem>
                             <MenuItem key="trips_page" onClick={handleCloseNavMenu} component={Link} to="/trips">
                                 <Typography textAlign="center">Trips</Typography>
@@ -96,39 +102,48 @@ const NavBar = () => {
                         CruiseCoordinator
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Button key="home_page" component={Link} to="/" sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button>
+                        <Button key="dashboard_page" component={Link} to="/dashboard" sx={{ my: 2, color: 'white', display: 'block' }}>Dashboard</Button>
                         <Button key="trips_page" component={Link} to="/trips" sx={{ my: 2, color: 'white', display: 'block' }}>Trips</Button>
                         <Button key="about_page" component={Link} to="/about" sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            <MenuItem key='profile_menu_item' onClick={handleCloseUserMenu} component={Link} to="/profile">
-                                <Typography textAlign="center">Profile</Typography>
-                            </MenuItem>
-                            <LogoutButton />
-                        </Menu>
-                    </Box>
+                    {authed ? (
+                        <>
+                            <Box sx={{ flexGrow: 0 }}>
+                                <Tooltip title="Open settings">
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                        <Avatar alt="Remy Sharp" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    <MenuItem key='profile_menu_item' onClick={handleCloseUserMenu} component={Link} to="/profile">
+                                        <Typography textAlign="center">Profile</Typography>
+                                    </MenuItem>
+                                    <LogoutButton />
+                                </Menu>
+                            </Box>
+                        </>
+                    ) : (
+                        <>
+                            <LoginModal />
+                            <SignUpModal />
+                        </>
+                    )}
                 </Toolbar>
             </Container>
         </AppBar>
