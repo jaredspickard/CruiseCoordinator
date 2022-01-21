@@ -14,7 +14,7 @@ function handleLoginFailure(err) {
   console.log(err);
 }
 
-export default function FormDialog() {
+export default function LoginModal() {
 
   const { login } = useAuth();
 
@@ -46,6 +46,9 @@ export default function FormDialog() {
                 onFailure={handleLoginFailure}
                 cookiePolicy={'single_host_origin'}
               />
+            <form>
+              <label>username <input type="text" name="username"></input></label>
+            </form>
             <Button variant="contained">Continue with email</Button>
           </Stack>
         </DialogContent>

@@ -1,7 +1,7 @@
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from api.models import Cruiser, Trip
+from api.models import Cruiser, ExternalAccount, Trip
 from api import db#, guard
 
 
@@ -10,6 +10,30 @@ GOOGLE_CLIENT_ID = '301139010020-rm1mnr8dlnd3656lt8j5f1gv6o001uv6.apps.googleuse
 
 class Services:
     """ Utils class for CruiseCoordinator backend. """
+
+    @staticmethod
+    def create_cruiser(username, email, password):
+        """ Create a new Cruiser with the given credentials and log them in. """
+        new_cruiser = Cruiser(username=username, email=email)
+        # set the password
+        new_cruiser.set_password(password)
+        # TODO: add this cruiser to the db session and commit
+        # TODO: log the cruiser in 
+
+    @staticmethod
+    def create_cruiser_external_account(username, email, external_id, external_type):
+        """ Create a new Cruiser linked through their google account using the given credentials and log them in. """
+        # create a new cruiser
+        new_cruiser = Cruiser(username=username, email=email)
+        # create an associated external_account
+        new_external_account = ExternalAccount(cruiser_id=new_cruiser.id, external_id=external_id, external_type=external_type)
+        # TODO: add these models to the session and commit
+        # TODO: log the cruiser in
+
+    @staticmethod
+    def check_account_availability(external_id, external_type):
+        """ Returns True if an external_account does NOT exist for the given params, False if one DOES exist. """
+        return ExternalAccount.query.filter_by(external_id=external_id, external_type=external_type).first() is None
 
     @staticmethod
     def get_google_user_id(token):
