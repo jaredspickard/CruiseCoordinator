@@ -19,10 +19,6 @@ class Cruiser(UserMixin, db.Model):
         """ Verify that the hash of the given password matches the stored password hash. """
         return check_password_hash(self.password_hash, password)
 
-    @classmethod
-    def get_by_google_id(cls, user_id):
-        return cls.query.filter_by(google_user_id=user_id).first()
-
 
 @login.user_loader
 def load_user(id):

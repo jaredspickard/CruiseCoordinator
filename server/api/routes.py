@@ -6,8 +6,8 @@ from flask_login import (
 )
 
 from api import app
-from api.services.cruisers import CruiserServices
-from api.services.trips import TripServices
+from api.services import CruiserServices
+from api.services import TripServices
 
 
 @app.route('/api/register', methods=['POST'])
@@ -17,10 +17,11 @@ def register():
         req = request.get_json(force=True)
         email = req.get('email')
         password = req.get('password')
-        CruiserServices.create_cruiser(email, password)
+        success = CruiserServices.create_cruiser_email(email, password)
     except Exception as e:
         print(str(e))
-    return make_response({})
+        success = False
+    return make_response({'success': success})
 
 
 @app.route('/api/login', methods=['POST'])
@@ -30,10 +31,11 @@ def login():
         req = request.get_json(force=True)
         email = req.get('email')
         password = req.get('password')
-        CruiserServices.login_cruiser(email, password)
+        success = CruiserServices.login_cruiser_email(email, password)
     except Exception as e:
         print(str(e))
-    return make_response({})
+        success = False
+    return make_response({'success': success})
 
 
 # @app.route('/api/external_account/available/google/<token>', methods=['GET'])
