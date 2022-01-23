@@ -27,37 +27,37 @@ def register():
     return make_response({})
 
 
-@app.route('/api/external_account/available/google/<token>', methods=['GET'])
-def google_account_availability(token):
-    """ Check whether or not an external_account can be created for the given google account.
+# @app.route('/api/external_account/available/google/<token>', methods=['GET'])
+# def google_account_availability(token):
+#     """ Check whether or not an external_account can be created for the given google account.
     
-    If an external_account can be created, return the google_user_id. """
-    try:
-        external_id = Services.get_google_user_id(token)
-        account_available = Services.check_account_availability(external_id, GOOGLE)
-    except Exception as e:
-        print(str(e))
-        external_id = None
-        account_available = False
-    return make_response({
-        'available': account_available,
-        'external_id': external_id
-    })
+#     If an external_account can be created, return the google_user_id. """
+#     try:
+#         external_id = Services.get_google_user_id(token)
+#         account_available = Services.check_account_availability(external_id, GOOGLE)
+#     except Exception as e:
+#         print(str(e))
+#         external_id = None
+#         account_available = False
+#     return make_response({
+#         'available': account_available,
+#         'external_id': external_id
+#     })
         
 
 
-@app.route('/api/register/google', methods=['POST'])
-def register_google():
-    """ Register a new Cruiser Account using a Google Login. """
-    try:
-        req = request.get_json(force=True)
-        username = req.get('username')
-        email = req.get('email')
-        google_user_id = req.get('google_user_id')
-        Services.create_cruiser_external_account(username, email, google_user_id, GOOGLE)
-    except Exception as e:
-        print(str(e))
-    return make_response({})
+# @app.route('/api/register/google', methods=['POST'])
+# def register_google():
+#     """ Register a new Cruiser Account using a Google Login. """
+#     try:
+#         req = request.get_json(force=True)
+#         username = req.get('username')
+#         email = req.get('email')
+#         google_user_id = req.get('google_user_id')
+#         Services.create_cruiser_external_account(username, email, google_user_id, GOOGLE)
+#     except Exception as e:
+#         print(str(e))
+#     return make_response({})
 
 
 @app.route('/api/login', methods=['POST'])
@@ -81,9 +81,9 @@ def login():
     return resp
 
 
-@app.route('/api/login/google', methods=['POST'])
-def login_google():
-    """ Logs a Cruiser in using the given username/google_user_id. """
+# @app.route('/api/login/google', methods=['POST'])
+# def login_google():
+#     """ Logs a Cruiser in using the given username/google_user_id. """
 
 
 
@@ -96,6 +96,18 @@ def check_auth():
 def logout():
     logout_cruiser()
     return make_response({'logged_out': True})
+
+
+@app.route('/api/trips/list', methods=['GET'])
+@login_required
+def list_trips():
+    """ API to list the trips for the logged-in cruiser. """
+    try:
+        trips = Services.get_trips_by_cruiser_id(current_cruiser.id)
+    except Exception as e:
+        print(str(e))
+        trips = []
+    return make_response({'trips': trips})
 
 
 @app.route('/api/trips/create', methods=['POST'])
@@ -111,3 +123,30 @@ def create_trip():
         print(str(e))
         ret = {'trip': None}
     return ret, 200
+
+
+@app.route('/api/trips/update', methods=['POST'])
+@login_required
+def update_trip():
+    try:
+        req = request.get_json(force=True)
+        trip_id = req.get('trip_id')
+        updated_data = req.get('trip_data')
+        Services.update_trip(trip_id, updated_data)
+    except Exception as e:
+        print(str(e))
+    return make_response({'trip': {}})
+
+
+@app.route('/api/trips/delete', methods=['DELETE'])
+@login_required
+def delete_trip():
+    try:
+        # TODO: check if trip id should be in req data or in route
+        req = request.get_json(force=True)
+        trip_id = req.get('trip_id')
+        # TODO: ensure only the coordinator can delete their own trips
+        Services.delete_trip(trip_id)
+    except Exception as e:
+        print(str(e))
+    return make_response({'trip': {}})
