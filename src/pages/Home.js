@@ -7,27 +7,12 @@ class Home extends React.Component {
 
     constructor(props) {
         super(props);
-        this.checkGoogleAvailability = this.checkGoogleAvailability.bind(this);
-    }
-
-    async checkGoogleAvailability(googleData) {
-        const resp = await fetch('/api/external_account/available/google/' + googleData.tokenId);
-        const data = await resp.json()
-        console.log(data);
     }
 
     render() {
         return (
             <div>
                 <h2>Landing Page</h2>
-                <GoogleLogin
-                    variant="contained"
-                    color="primary"
-                    clientId={googleClientId}
-                    buttonText='Check account availability'
-                    onSuccess={this.checkGoogleAvailability}
-                    cookiePolicy={'single_host_origin'}
-                />
             </div>
         )
     }

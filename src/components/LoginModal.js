@@ -44,7 +44,7 @@ export default function LoginModal() {
   };
 
   const handleEmailLogin = async () => {
-    login(email, password)
+    login(email, password);
   }
 
   return (

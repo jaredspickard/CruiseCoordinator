@@ -19,6 +19,15 @@ class Cruiser(UserMixin, db.Model):
         """ Verify that the hash of the given password matches the stored password hash. """
         return check_password_hash(self.password_hash, password)
 
+    def serialize(self):
+        """ Returns object in dict format. """
+        return {
+            'id': self.id,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name
+        }
+
 
 @login.user_loader
 def load_user(id):
@@ -42,3 +51,11 @@ class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     trip_name = db.Column(db.Text)
     coordinator_id = db.Column(db.Integer, db.ForeignKey('cruiser.id'))
+
+    def serialize(self):
+        """ Returns object in dict format. """
+        return {
+            'id': self.id,
+            'trip_name': self.trip_name,
+            'coordinator_id': self.coordinator_id
+        }
