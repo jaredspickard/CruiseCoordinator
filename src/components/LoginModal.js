@@ -3,6 +3,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
 import { GoogleLogin } from 'react-google-login';
 import { useAuth } from '../auth/Authentication';
 import { Stack } from '@mui/material';
@@ -20,6 +23,10 @@ export default function LoginModal() {
 
   const [open, setOpen] = React.useState(false);
 
+  const [email, setEmail] = React.useState("");
+
+  const [password, setPassword] = React.useState("");
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -27,6 +34,18 @@ export default function LoginModal() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleEmailLogin = async () => {
+    login(email, password)
+  }
 
   return (
     <div>
@@ -37,7 +56,7 @@ export default function LoginModal() {
         <DialogTitle>Log in to CruiseCoordinator</DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
-              <GoogleLogin
+            {/* <GoogleLogin
                 variant="contained"
                 color="primary"
                 clientId={googleClientId}
@@ -45,11 +64,16 @@ export default function LoginModal() {
                 onSuccess={login}
                 onFailure={handleLoginFailure}
                 cookiePolicy={'single_host_origin'}
-              />
-            <form>
-              <label>username <input type="text" name="username"></input></label>
-            </form>
-            <Button variant="contained">Continue with email</Button>
+              /> */}
+            <FormControl variant="standard">
+              <InputLabel htmlFor="component-simple">Email</InputLabel>
+              <Input id="login-email" value={email} onChange={handleEmailChange} />
+            </FormControl>
+            <FormControl variant="standard">
+              <InputLabel htmlFor="component-simple">Password</InputLabel>
+              <Input id="login-password" type="password" value={password} onChange={handlePasswordChange} />
+            </FormControl>
+            <Button variant="contained" onClick={handleEmailLogin}>Login</Button>
           </Stack>
         </DialogContent>
       </Dialog>

@@ -1,14 +1,31 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import { GoogleLogin } from 'react-google-login';
+import { useAuth } from '../auth/Authentication';
+import { Stack } from '@mui/material';
 
-export default function FormDialog() {
+const googleClientId = '301139010020-rm1mnr8dlnd3656lt8j5f1gv6o001uv6.apps.googleusercontent.com'
+
+function handleLoginFailure(err) {
+  console.log('failed to log in');
+  console.log(err);
+}
+
+export default function SignUpModal() {
+
+  const { signup } = useAuth();
+
   const [open, setOpen] = React.useState(false);
+
+  const [email, setEmail] = React.useState("");
+
+  const [password, setPassword] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,32 +35,47 @@ export default function FormDialog() {
     setOpen(false);
   };
 
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleEmailSignUp = async () => {
+    signup(email, password)
+  }
+
   return (
     <div>
       <Button color="inherit" variant="outlined" onClick={handleClickOpen}>
         Sign up
       </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog open={open} onClose={handleClose} maxWidth="xs">
+        <DialogTitle>Sign up for CruiseCoordinator</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
+          <Stack spacing={2}>
+            {/* <GoogleLogin
+                variant="contained"
+                color="primary"
+                clientId={googleClientId}
+                buttonText='Continue with Google'
+                onSuccess={login}
+                onFailure={handleLoginFailure}
+                cookiePolicy={'single_host_origin'}
+              /> */}
+            <FormControl variant="standard">
+              <InputLabel htmlFor="component-simple">Email</InputLabel>
+              <Input id="login-email" value={email} onChange={handleEmailChange} />
+            </FormControl>
+            <FormControl variant="standard">
+              <InputLabel htmlFor="component-simple">Password</InputLabel>
+              <Input id="login-password" type="password" value={password} onChange={handlePasswordChange} />
+            </FormControl>
+            <Button variant="contained" onClick={handleEmailSignUp}>Sign up</Button>
+          </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
