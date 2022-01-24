@@ -5,7 +5,7 @@ from flask_login import (
     login_user as login_cruiser
 )
 
-from server.api.models import Cruiser, ExternalAccount, Trip
+from api.models import Cruiser, ExternalAccount, Trip
 from app import db#, guard
 
 
