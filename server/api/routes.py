@@ -6,7 +6,7 @@ from flask_login import (
 )
 
 from app import app
-from api.services import CruiserServices, TripServices
+from server.api.services import CruiserServices, TripServices
 
 
 @app.route('/api/register', methods=['POST'])
