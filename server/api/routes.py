@@ -5,7 +5,7 @@ from flask_login import (
     login_required
 )
 
-from app import app
+from server.main import app
 from server.api.services import CruiserServices, TripServices
 
 
