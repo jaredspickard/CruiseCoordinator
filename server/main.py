@@ -12,12 +12,6 @@ app.debug = True
 app.config.from_object(Config)
 
 heroku = Heroku(app)
-
-# update the database uri if need be (handles sqlalchemy postgres deprecation)
-db_uri = os.getenv('DATABASE_URL')
-if db_uri.startswith('postgres://'):
-    db_uri = db_uri.replace('postgres://', 'postgresql://', 1)
-    os.environ['DATABASE_URL'] = db_uri
 db = SQLAlchemy(app)
 login = LoginManager(app)
 # guard = Praetorian()
