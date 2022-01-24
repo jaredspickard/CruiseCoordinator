@@ -6,7 +6,7 @@ from flask_login import (
 )
 
 from server.api.models import Cruiser, ExternalAccount, Trip
-from api import db#, guard
+from app import db#, guard
 
 
 GOOGLE_CLIENT_ID = '301139010020-rm1mnr8dlnd3656lt8j5f1gv6o001uv6.apps.googleusercontent.com'
