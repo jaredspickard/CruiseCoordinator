@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_heroku import Heroku
 # from flask_praetorian import Praetorian
 # from flask_cors import CORS
 from config import Config
@@ -10,6 +11,7 @@ app = Flask(__name__)
 app.debug = True
 app.config.from_object(Config)
 
+heroku = Heroku(app)
 db = SQLAlchemy()
 login = LoginManager(app)
 # guard = Praetorian()
