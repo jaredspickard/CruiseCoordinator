@@ -13,7 +13,8 @@ heroku = Heroku(app)
 db = SQLAlchemy(app)
 login = LoginManager(app)
 
-from server.api import routes, models
+from server.api.routes import *
+from server.api.models import *
 
 @app.route("/", defaults={'path':''})
 def serve(path):
