@@ -44,7 +44,7 @@ AWS
 
 I kicked this project off with a ton of help from the following blogs/repos, so thank you to those who contributed:
 
-https://yasoob.me/posts/how-to-setup-and-deploy-jwt-auth-using-react-and-flask/
+https://towardsdatascience.com/build-deploy-a-react-flask-app-47a89a5d17d9
 
 https://blog.prototypr.io/how-to-build-google-login-into-a-react-app-and-node-express-api-821d049ee670
 

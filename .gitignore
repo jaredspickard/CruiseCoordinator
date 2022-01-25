@@ -24,3 +24,5 @@ yarn-error.log*
 
 *.pycf
 local_main.py
+
+/__pycache__
