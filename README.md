@@ -4,11 +4,7 @@ CruiseCoordinator is a full-stack web app designed to simplify the process of co
 
 ## Features
 
-Profile Management
-
-Trip/Vehicle Logistics
-
-... I'll elaborate on these features more as I continue to develop them
+... I'll elaborate on features as I develop them
 
 ## Stack
 
@@ -34,11 +30,7 @@ Google Identity
 
 ### Deployment (probably)
 
-NGINX
-
-Docker
-
-AWS
+Heroku
 
 ## Special Thanks
 
