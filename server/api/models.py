@@ -35,17 +35,17 @@ def load_user(id):
     return Cruiser.query.get(int(id))
 
 
-class ExternalAccount(db.Model):
-    """ Class to store external_account information for cruisers. """
-    __tablename__ = 'external_accounts'
-    id = db.Column(db.Integer, primary_key=True)
-    cruiser_id = db.Column(db.Integer, db.ForeignKey('cruisers.id'))
-    external_id = db.Column(db.Text, index=True)
-    external_type = db.Column(db.Text, index=True)
-    __table_args__ = (
-        db.UniqueConstraint('external_id', 'external_type', name='_unique_external_account'),
-        db.UniqueConstraint('cruiser_id', 'external_type', name='_unique_external_type_per_cruiser')
-    )
+# class ExternalAccount(db.Model):
+#     """ Class to store external_account information for cruisers. """
+#     __tablename__ = 'external_accounts'
+#     id = db.Column(db.Integer, primary_key=True)
+#     cruiser_id = db.Column(db.Integer, db.ForeignKey('cruisers.id'))
+#     external_id = db.Column(db.Text, index=True)
+#     external_type = db.Column(db.Text, index=True)
+#     __table_args__ = (
+#         db.UniqueConstraint('external_id', 'external_type', name='_unique_external_account'),
+#         db.UniqueConstraint('cruiser_id', 'external_type', name='_unique_external_type_per_cruiser')
+#     )
 
 
 class Trip(db.Model):
@@ -54,6 +54,8 @@ class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     trip_name = db.Column(db.Text)
     coordinator_id = db.Column(db.Integer, db.ForeignKey('cruisers.id'))
+    # visible_to_friends = db.Column(db.Boolean, default=False)
+    # TODO: add more details related to privacy and attendee accessability
 
     def serialize(self):
         """ Returns object in dict format. """
@@ -64,11 +66,13 @@ class Trip(db.Model):
         }
 
 
+# define relationship for cruisers and trips (manages invitations/requests as well)
 trip_attendees = db.Table(
     'trip_attendees',
-    db.Column('trip_id', db.Integer, db.ForeignKey('trip.id'), primary_key=True),
+    db.Column('trip_id', db.Integer, db.ForeignKey('trips.id'), primary_key=True),
     db.Column('cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
-    db.Column('pending', db.Boolean, default=True)
+    db.Column('pending_coordinator', db.Boolean, default=True),
+    db.Column('pending_cruiser', db.Boolean, default=True)
 )
 
 
@@ -76,9 +80,39 @@ class TripLeg(db.Model):
     """ Class representing a single leg of a trip. """
     __tablename__ = 'trip_legs'
     id = db.Column(db.Integer, primary_key=True)
-    trip_id = db.Column(db.Integer, db.ForeignKey('trip.id'))
-    starting_point = db.Column(db.Integer, db.ForeignKey('location.id'))
-    destination = db.Column(db.Integer, db.ForeignKey('location.id'))
+    trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'))
+    starting_point = db.Column(db.Integer, db.ForeignKey('locations.id'))
+    destination = db.Column(db.Integer, db.ForeignKey('locations.id'))
+    # TODO: add more details (such as dates)
+
+
+# TODO: consider creating a table to allow cruisers to save vehicle info (can prepopulate this model)
+class TripVehicle(db.Model):
+    """ Class representing a vehicle that's available on this trip. """
+    __tablename__ = 'trip_vehicles'
+    id = db.Column(db.Integer, primary_key=True)
+    cruiser_id = db.Column(db.Integer, db.ForeignKey('cruisers.id'))
+    trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'))
+    vehicle_name = db.Column(db.Text)
+    # TODO: add vehicle info (make/model/color, number of seats, etc.)
+
+
+class LegVehicle(db.Model):
+    """ Class representing an instance of a TripVehicle for a single leg of the Trip. """
+    __tablename__ = 'trip_leg_vehicles'
+    id = db.Column(db.Integer, primary_key=True)
+    leg_id = db.Column(db.Integer, db.ForeignKey('trip_legs.id'))
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('trip_vehicles.id'))
+    # TODO: add leg-specific data
+
+
+# define relationship between cruisers, trip_legs, and leg_vehicles
+leg_participants = db.Table(
+    'trip_attendees',
+    db.Column('leg_id', db.Integer, db.ForeignKey('trip_legs.id'), primary_key=True),
+    db.Column('cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
+    db.Column('vehicle_id', db.Integer, db.ForeignKey('trip_leg_vehicles.id'))
+)
 
 
 class Location(db.Model):
