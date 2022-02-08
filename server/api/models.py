@@ -5,6 +5,7 @@ from app import db, login
 
 
 class Cruiser(UserMixin, db.Model):
+    __tablename__ = 'cruisers'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Text, index=True, unique=True)
     password_hash = db.Column(db.Text)
@@ -38,19 +39,21 @@ class ExternalAccount(db.Model):
     """ Class to store external_account information for cruisers. """
     __tablename__ = 'external_accounts'
     id = db.Column(db.Integer, primary_key=True)
-    cruiser_id = db.Column(db.Integer, db.ForeignKey('cruiser.id'))
+    cruiser_id = db.Column(db.Integer, db.ForeignKey('cruisers.id'))
     external_id = db.Column(db.Text, index=True)
     external_type = db.Column(db.Text, index=True)
     __table_args__ = (
         db.UniqueConstraint('external_id', 'external_type', name='_unique_external_account'),
-        db.UniqueConstraint('cruiser_id', 'external_type', name='_unique')
+        db.UniqueConstraint('cruiser_id', 'external_type', name='_unique_external_type_per_cruiser')
     )
 
 
 class Trip(db.Model):
+    """ Class representing an overall Trip. """
+    __tablename__ = 'trips'
     id = db.Column(db.Integer, primary_key=True)
     trip_name = db.Column(db.Text)
-    coordinator_id = db.Column(db.Integer, db.ForeignKey('cruiser.id'))
+    coordinator_id = db.Column(db.Integer, db.ForeignKey('cruisers.id'))
 
     def serialize(self):
         """ Returns object in dict format. """
@@ -59,3 +62,30 @@ class Trip(db.Model):
             'trip_name': self.trip_name,
             'coordinator_id': self.coordinator_id
         }
+
+
+trip_attendees = db.Table(
+    'trip_attendees',
+    db.Column('trip_id', db.Integer, db.ForeignKey('trip.id'), primary_key=True),
+    db.Column('cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
+    db.Column('pending', db.Boolean, default=True)
+)
+
+
+class TripLeg(db.Model):
+    """ Class representing a single leg of a trip. """
+    __tablename__ = 'trip_legs'
+    id = db.Column(db.Integer, primary_key=True)
+    trip_id = db.Column(db.Integer, db.ForeignKey('trip.id'))
+    starting_point = db.Column(db.Integer, db.ForeignKey('location.id'))
+    destination = db.Column(db.Integer, db.ForeignKey('location.id'))
+
+
+class Location(db.Model):
+    """ Class to store locations (addresses). """
+    __tablename__ = 'locations'
+    id = db.Column(db.Integer, primary_key=True)
+    street_address = db.Column(db.Text)
+    city = db.Column(db.Text)
+    state = db.Column(db.Text)
+    zip_code = db.Column(db.Text)
