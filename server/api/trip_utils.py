@@ -21,7 +21,7 @@ class TripUtils:
     @staticmethod
     def create_trip(cruiser_id, trip_name):
         """ Create a trip coordinated by the given cruiser_id and containing the given trip details. """
-        trip = Trip(trip_name=trip_name, coordinator_id=cruiser_id)
+        trip = Trip(name=trip_name, coordinator_id=cruiser_id)
         db.session.add(trip)
         db.session.commit()
         return trip.serialize()
