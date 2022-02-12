@@ -5,10 +5,10 @@ from flask_login import (
     login_required
 )
 
-from app import app
-# from server.api.cruiser_utils import CruiserUtils
 from server.api.utils.cruiser import CruiserUtils
-from server.api.trip_utils import TripUtils
+from server.api.utils.trip import TripUtils
+
+from app import app
 
 
 @app.route('/api/register', methods=['POST'])

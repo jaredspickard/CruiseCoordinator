@@ -5,7 +5,7 @@ from flask_login import (
     login_user as login_cruiser
 )
 
-from server.api.models import (
+from server.api.model.cruiser import (
     Cruiser,
     cruiser_relationships as CruiserRelationship
 )
@@ -36,7 +36,6 @@ class CruiserUtils:
     @staticmethod
     def login_with_email(email, password):
         """ Function to log a cruiser in using their email and password. """
-        print('we in here')
         # fetch the cruiser entry
         cruiser = Cruiser.query.filter_by(email=email).first()
         # verify their password is correct
