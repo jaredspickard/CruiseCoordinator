@@ -8,6 +8,7 @@ class Cruiser(UserMixin, db.Model):
     __tablename__ = 'cruisers'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Text, index=True, unique=True)
+    username = db.Column(db.Text, index=True, unique=True)
     password_hash = db.Column(db.Text)
     first_name = db.Column(db.Text)
     last_name = db.Column(db.Text)
@@ -35,6 +36,16 @@ def load_user(id):
     return Cruiser.query.get(int(id))
 
 
+# create a table to store relationships between Cruisers
+# ensure first_cruiser_id < second_cruiser_id
+cruiser_relationships = db.Table(
+    'cruiser_relationships',
+    db.Column('first_cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
+    db.Column('second_cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
+    db.Column('relationship_type', db.Text)
+)
+
+
 # class ExternalAccount(db.Model):
 #     """ Class to store external_account information for cruisers. """
 #     __tablename__ = 'external_accounts'
@@ -52,8 +63,11 @@ class Trip(db.Model):
     """ Class representing an overall Trip. """
     __tablename__ = 'trips'
     id = db.Column(db.Integer, primary_key=True)
-    trip_name = db.Column(db.Text)
     coordinator_id = db.Column(db.Integer, db.ForeignKey('cruisers.id'))
+    name = db.Column(db.Text)
+    description = db.Column(db.Text)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     # visible_to_friends = db.Column(db.Boolean, default=False)
     # TODO: add more details related to privacy and attendee accessability
 
@@ -61,8 +75,11 @@ class Trip(db.Model):
         """ Returns object in dict format. """
         return {
             'id': self.id,
-            'trip_name': self.trip_name,
-            'coordinator_id': self.coordinator_id
+            'coordinator_id': self.coordinator_id,
+            'name': self.name,
+            'description': self.description,
+            'start_date': self.start_date,
+            'end_date': self.end_date
         }
 
 
@@ -71,8 +88,8 @@ trip_attendees = db.Table(
     'trip_attendees',
     db.Column('trip_id', db.Integer, db.ForeignKey('trips.id'), primary_key=True),
     db.Column('cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
-    db.Column('pending_coordinator', db.Boolean, default=True),
-    db.Column('pending_cruiser', db.Boolean, default=True)
+    db.Column('pending_coordinator_approval', db.Boolean, default=True),
+    db.Column('pending_cruiser_acceptance', db.Boolean, default=True)
 )
 
 
