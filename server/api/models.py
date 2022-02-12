@@ -42,7 +42,7 @@ cruiser_relationships = db.Table(
     'cruiser_relationships',
     db.Column('first_cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
     db.Column('second_cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
-    db.Column('relationship_type', db.Text)
+    db.Column('type', db.Text)
 )
 
 
