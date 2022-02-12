@@ -5,7 +5,17 @@ from flask_login import (
     login_user as login_cruiser
 )
 
-from server.api.models import Cruiser, ExternalAccount, Trip
+from server.api.models import (
+    Cruiser,
+    cruiser_relationships as CruiserRelationship,
+    ExternalAccount,
+    Trip
+)
+from server.api.constants import (
+    FRIENDS,
+    PENDING_FIRST_SECOND,
+    PENDING_SECOND_FIRST
+)
 from app import db
 
 
@@ -40,6 +50,67 @@ class CruiserServices:
         login_cruiser(cruiser)
         return True
 
+    @staticmethod
+    def send_friend_request(recipient_cruiser_id):
+        """ Function to send a friend request from the current_cruiser to the given recipient_cruiser_id. """
+        requesting_cruiser_id = current_cruiser.id
+        first_id, second_id, rel_type = CruiserServices._get_first_second_type_relationship(requesting_cruiser_id, recipient_cruiser_id)
+        # create a cruiser relationship
+        new_relationship = CruiserRelationship(
+            first_cruiser_id=first_id,
+            second_cruiser_id=second_id,
+            relationship_type=rel_type
+        )
+        db.session.add(new_relationship)
+        db.session.commit()
+        return True
+
+    @staticmethod
+    def accept_friend_request(requesting_cruiser_id):
+        recipient_cruiser_id = current_cruiser.id
+        first_id, second_id, rel_type = CruiserServices._get_first_second_type_relationship(requesting_cruiser_id, recipient_cruiser_id)
+        # find the cruiser_relationship
+        relationship = CruiserRelationship.query.filter_by(
+            first_cruiser_id=first_id,
+            second_cruiser_id=second_id
+        ).first()
+        # ensure that this is a valid operation
+        if not relationship or relationship.type != rel_type:
+            return False
+        relationship.type = FRIENDS
+        db.session.add(relationship)
+        db.session.commit()
+        return True
+
+    @staticmethod
+    def decline_friend_request(requesting_cruiser_id):
+        recipient_cruiser_id = current_cruiser.id
+        first_id, second_id, rel_type = CruiserServices._get_first_second_type_relationship(requesting_cruiser_id, recipient_cruiser_id)
+        # find the cruiser_relationship
+        relationship = CruiserRelationship.query.filter_by(
+            first_cruiser_id=first_id,
+            second_cruiser_id=second_id
+        ).first()
+        # ensure that this is a valid operation
+        if not relationship or relationship.type != rel_type:
+            return False
+        # delete this relationship
+        db.session.delete(relationship)
+        db.session.commit()
+        return True
+
+    @staticmethod
+    def _get_first_second_type_relationship(requesting_id, recipient_id):
+        """ Helper function to get the appropriate first_cruiser_id, second_cruiser_id, and type for the given request/recipient relationship. """
+        if requesting_id < recipient_id:
+            first_cruiser_id = requesting_id
+            second_cruiser_id = recipient_id
+            relationship_type = PENDING_FIRST_SECOND
+        else:
+            first_cruiser_id = recipient_id
+            second_cruiser_id = requesting_id
+            relationship_type = PENDING_SECOND_FIRST
+        return first_cruiser_id, second_cruiser_id, relationship_type
 
 class TripServices:
     """ Utils class for trip-related functions. """
