@@ -6,7 +6,8 @@ from flask_login import (
 )
 
 from app import app
-from server.api.cruiser_utils import CruiserUtils
+# from server.api.cruiser_utils import CruiserUtils
+from server.api.utils.cruiser import CruiserUtils
 from server.api.trip_utils import TripUtils
 
 
