@@ -1,4 +1,3 @@
-import os
 from flask import request, make_response
 from flask_login import (
     current_user as current_cruiser,
@@ -7,7 +6,8 @@ from flask_login import (
 )
 
 from app import app
-from server.api.services import CruiserServices, TripServices
+from server.api.cruiser_utils import CruiserUtils
+from server.api.trip_utils import TripUtils
 
 
 @app.route('/api/register', methods=['POST'])
@@ -17,7 +17,7 @@ def register():
         req = request.get_json(force=True)
         email = req.get('email')
         password = req.get('password')
-        success = CruiserServices.create_cruiser_email(email, password)
+        success = CruiserUtils.create_cruiser_with_email(email, password)
     except Exception as e:
         print(str(e))
         success = False
@@ -31,71 +31,11 @@ def login():
         req = request.get_json(force=True)
         email = req.get('email')
         password = req.get('password')
-        success = CruiserServices.login_cruiser_email(email, password)
+        success = CruiserUtils.login_with_email(email, password)
     except Exception as e:
         print(str(e))
         success = False
     return make_response({'success': success})
-
-
-# @app.route('/api/external_account/available/google/<token>', methods=['GET'])
-# def google_account_availability(token):
-#     """ Check whether or not an external_account can be created for the given google account.
-    
-#     If an external_account can be created, return the google_user_id. """
-#     try:
-#         external_id = Services.get_google_user_id(token)
-#         account_available = Services.check_account_availability(external_id, GOOGLE)
-#     except Exception as e:
-#         print(str(e))
-#         external_id = None
-#         account_available = False
-#     return make_response({
-#         'available': account_available,
-#         'external_id': external_id
-#     })
-        
-
-
-# @app.route('/api/register/google', methods=['POST'])
-# def register_google():
-#     """ Register a new Cruiser Account using a Google Login. """
-#     try:
-#         req = request.get_json(force=True)
-#         username = req.get('username')
-#         email = req.get('email')
-#         google_user_id = req.get('google_user_id')
-#         Services.create_cruiser_external_account(username, email, google_user_id, GOOGLE)
-#     except Exception as e:
-#         print(str(e))
-#     return make_response({})
-
-
-# @app.route('/api/login', methods=['POST'])
-# def login():
-#     """ Logs in a Cruiser by parsing a POST request containing a Google Token ID. 
-    
-#     If a Cruiser does not exist with the authenticated (google) user_id, one is created. 
-#     Returns a JWT for the logged-in Cruiser. """
-#     try:
-#         req = request.get_json(force=True)
-#         token = req.get('token')
-#         # validate the token using google auth (throws an error if invalid)
-#         google_user_id = Services.get_google_user_id(token)
-#         # get (or create) the associated cruiser
-#         cruiser = Services.get_or_create_cruiser(google_user_id)
-#         # login the user (in context of the session)
-#         login_cruiser(cruiser)
-#         resp = make_response({'logged_in': True})
-#     except Exception as e:
-#         resp = make_response({'logged_in': False, 'error_msg': str(e)})
-#     return resp
-
-
-# @app.route('/api/login/google', methods=['POST'])
-# def login_google():
-#     """ Logs a Cruiser in using the given username/google_user_id. """
-
 
 
 @app.route('/api/auth')
@@ -114,7 +54,7 @@ def logout():
 def list_trips():
     """ API to list the trips for the logged-in cruiser. """
     try:
-        trips = TripServices.get_trips_by_cruiser_id(current_cruiser.id)
+        trips = TripUtils.get_trips_by_cruiser_id(current_cruiser.id)
     except Exception as e:
         print(str(e))
         trips = []
@@ -128,7 +68,7 @@ def create_trip():
         req = request.get_json(force=True)
         cruiser_id = current_cruiser.id
         trip_name = req.get('trip_name', 'default_trip_name')
-        trip = TripServices.create_trip(cruiser_id, trip_name)
+        trip = TripUtils.create_trip(cruiser_id, trip_name)
         ret = {'trip': trip}
     except Exception as e:
         print(str(e))
@@ -143,7 +83,7 @@ def update_trip():
         req = request.get_json(force=True)
         trip_id = req.get('trip_id')
         updated_data = req.get('trip_data')
-        TripServices.update_trip(trip_id, updated_data)
+        TripUtils.update_trip(trip_id, updated_data)
     except Exception as e:
         print(str(e))
     return make_response({'trip': {}})
@@ -157,7 +97,7 @@ def delete_trip():
         req = request.get_json(force=True)
         trip_id = req.get('trip_id')
         # TODO: ensure only the coordinator can delete their own trips
-        TripServices.delete_trip(trip_id)
+        TripUtils.delete_trip(trip_id)
     except Exception as e:
         print(str(e))
     return make_response({'trip': {}})
