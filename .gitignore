@@ -32,4 +32,6 @@ local_app.py
 /__pycache__
 /server/__pycache__
 /server/api/__pycache__
+/server/api/routes/__pycache__
+/server/api/models/__pycache__
 /server/api/utils/__pycache__

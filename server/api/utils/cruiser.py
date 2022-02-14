@@ -5,7 +5,7 @@ from flask_login import (
     login_user as login_cruiser
 )
 
-from server.api.model.cruiser import (
+from server.api.models.cruiser import (
     Cruiser,
     cruiser_relationships as CruiserRelationship
 )

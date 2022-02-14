@@ -13,9 +13,14 @@ heroku = Heroku(app)
 db = SQLAlchemy(app)
 login = LoginManager(app)
 
-from server.api.routes import *
-from server.api.models import *
+# import the routes
+from server.api.routes.cruiser import *
+from server.api.routes.trip import *
+# import the models
+from server.api.models.cruiser import *
+from server.api.models.trip import *
 
+# TODO: comment out the below route when running locally
 @app.route("/", defaults={'path':''})
 def serve(path):
     return send_from_directory(app.static_folder,'index.html')

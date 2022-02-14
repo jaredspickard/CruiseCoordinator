@@ -3,7 +3,7 @@ from flask_login import (
     login_user as login_cruiser
 )
 
-from server.api.models import (
+from server.api.models.trip import (
     Trip
 )
 from app import db
