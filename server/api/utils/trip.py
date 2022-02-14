@@ -1,11 +1,5 @@
-from flask_login import (
-    current_user as current_cruiser,
-    login_user as login_cruiser
-)
+from server.api.models.trip import Trip
 
-from server.api.models.trip import (
-    Trip
-)
 from app import db
 
 
