@@ -23,13 +23,3 @@ class Trip(db.Model):
             'start_date': self.start_date,
             'end_date': self.end_date
         }
-
-
-# define relationship for cruisers and trips (manages invitations/requests as well)
-trip_attendees = db.Table(
-    'trip_attendees',
-    db.Column('trip_id', db.Integer, db.ForeignKey('trips.id'), primary_key=True),
-    db.Column('cruiser_id', db.Integer, db.ForeignKey('cruisers.id'), primary_key=True),
-    db.Column('pending_coordinator_approval', db.Boolean, default=True),
-    db.Column('pending_cruiser_acceptance', db.Boolean, default=True)
-)

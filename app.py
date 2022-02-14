@@ -17,10 +17,18 @@ login = LoginManager(app)
 from server.api.routes.cruiser import *
 from server.api.routes.trip import *
 # import the models
+from server.api.models.cruiser_relationship import *
 from server.api.models.cruiser import *
+from server.api.models.external_account import *
+from server.api.models.leg_participant import *
+from server.api.models.leg_vehicle import *
+from server.api.models.location import *
+from server.api.models.trip_attendee import *
+from server.api.models.trip_leg import *
+from server.api.models.trip_vehicle import *
 from server.api.models.trip import *
 
-# TODO: comment out the below route when running locally
+
 @app.route("/", defaults={'path':''})
 def serve(path):
     return send_from_directory(app.static_folder,'index.html')
