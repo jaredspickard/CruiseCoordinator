@@ -1,6 +1,7 @@
 from flask_login import current_user as current_cruiser
 
 from server.api.models.cruiser_relationship import CruiserRelationship
+from server.api.models.cruiser import Cruiser
 
 from app import db
 
@@ -11,6 +12,30 @@ PENDING_SECOND_FIRST = 'pending_second_first'
 
 
 class CruiserRelationshipUtils:
+
+    @staticmethod
+    def get_friend_request_ids():
+        """ Get ids of cruisers that have sent friend requests to the current_cruiser. """
+        # get first_cruiser_ids that have sent a friend request to current_cruiser
+        requests1 = CruiserRelationship.query.with_entities(
+            CruiserRelationship.first_cruiser_id
+        ).filter_by(
+            second_cruiser_id=current_cruiser.id,
+            type=PENDING_FIRST_SECOND
+        )
+        # get second_cruiser_ids that have sent a friend request to current_cruiser
+        requests2 = CruiserRelationship.query.with_entities(
+            CruiserRelationship.second_cruiser_id
+        ).filter_by(
+            first_cruiser_id=current_cruiser.id,
+            type=PENDING_SECOND_FIRST
+        )
+        cruiser_ids = [req.first_cruiser_id for req in requests1] + [req.second_cruiser_id for req in requests2]
+        cruisers_raw = Cruiser.query.filter(
+            Cruiser.id.in_(cruiser_ids)
+        )
+        return [c.serialize() for c in cruisers_raw]
+
 
     @staticmethod
     def send_friend_request(cruiser_id):

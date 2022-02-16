@@ -15,6 +15,7 @@ login = LoginManager(app)
 
 # import the routes
 from server.api.routes.cruiser import *
+from server.api.routes.cruiser_relationship import *
 from server.api.routes.trip import *
 # import the models
 from server.api.models.cruiser_relationship import *

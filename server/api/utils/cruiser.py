@@ -44,3 +44,11 @@ class CruiserUtils:
     #     id_info = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
     #     google_user_id = id_info.get('sub')
     #     return google_user_id
+
+    @staticmethod
+    def get_cruisers(cruiser_ids):
+        """ Get cruisers with the given cruiser_ids. """
+        cruisers_raw = Cruiser.query.filter(
+            Cruiser.id.in_(cruiser_ids)
+        )
+        return [c.serialize() for c in cruisers_raw]
