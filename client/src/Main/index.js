@@ -10,6 +10,7 @@ import Trips from '../pages/Trips';
 import About from '../pages/About';
 import Profile from '../pages/Profile';
 import ProtectedRoute from '../auth/ProtectedRoute';
+import Friends from '../pages/Friends';
 
 function Main() {
 
@@ -26,6 +27,7 @@ function Main() {
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}></Route>
                 <Route path="/trips" element={<ProtectedRoute><Trips /></ProtectedRoute>}></Route>
                 <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>}></Route>
+                <Route path="/friends" element={<ProtectedRoute><Friends /></ProtectedRoute>}></Route>
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>}></Route>
             </Routes>
             )}
