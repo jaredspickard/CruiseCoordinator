@@ -14,9 +14,8 @@ db = SQLAlchemy(app)
 login = LoginManager(app)
 
 # import the routes
-from server.api.routes.cruiser import *
-from server.api.routes.cruiser_relationship import *
-from server.api.routes.trip import *
+from server.api.routes import routes_bp
+app.register_blueprint(routes_bp)
 # import the models
 from server.api.models.cruiser_relationship import *
 from server.api.models.cruiser import *

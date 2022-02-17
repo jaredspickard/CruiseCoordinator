@@ -55,7 +55,7 @@ def accept_friend_request():
 
 @login_required
 @app.route('/api/friends/requests/decline', methods=['POST'])
-def accept_friend_request():
+def decline_friend_request():
     """ Decline a friend request from another Cruiser. """
     try:
         req = request.get_json(force=True)
@@ -69,7 +69,7 @@ def accept_friend_request():
 
 @login_required
 @app.route('/api/friends/remove', methods=['POST'])
-def accept_friend_request():
+def remove_friend():
     """ Remove a Cruiser from your friends. """
     try:
         req = request.get_json(force=True)
