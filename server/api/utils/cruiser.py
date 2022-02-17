@@ -46,9 +46,17 @@ class CruiserUtils:
     #     return google_user_id
 
     @staticmethod
-    def get_cruisers(cruiser_ids):
+    def get_cruisers_by_id(cruiser_ids):
         """ Get cruisers with the given cruiser_ids. """
         cruisers_raw = Cruiser.query.filter(
             Cruiser.id.in_(cruiser_ids)
         )
+        return [c.serialize() for c in cruisers_raw]
+
+    @staticmethod
+    def get_cruisers_by_criteria(filter_by, sort_by):
+        """ Get cruisers based on the given filter/sort params. """
+        # TODO: use the criteria
+        # currently returns all cruisers
+        cruisers_raw = Cruiser.query.all()
         return [c.serialize() for c in cruisers_raw]

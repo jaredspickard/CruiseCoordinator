@@ -17,7 +17,7 @@ def list_friends():
         # get ids of cruisers that have sent a friend request to current_cruiser 
         cruiser_ids = CruiserRelationshipUtils.get_friend_ids()
         # get list of cruisers for the above ids
-        friends = CruiserUtils.get_cruisers(cruiser_ids)
+        friends = CruiserUtils.get_cruisers_by_id(cruiser_ids)
     except Exception as e:
         print(str(e))
         friends = []
@@ -48,7 +48,7 @@ def list_friend_requests():
         # get ids of cruisers that have sent a friend request to current_cruiser 
         cruiser_ids = CruiserRelationshipUtils.get_friend_request_ids()
         # get list of cruisers for the above ids
-        friend_requests = CruiserUtils.get_cruisers(cruiser_ids)
+        friend_requests = CruiserUtils.get_cruisers_by_id(cruiser_ids)
     except Exception as e:
         print(str(e))
     return make_response({'friend_requests': friend_requests})

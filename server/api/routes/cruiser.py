@@ -38,12 +38,27 @@ def login():
     return make_response({'success': success})
 
 
-@app.route('/api/auth')
+@app.route('/api/auth', methods=['GET'])
 def check_auth():
     return make_response({'authenticated': current_cruiser.is_authenticated})
 
 
-@app.route('/api/logout')
+@app.route('/api/logout', methods=['GET'])
 def logout():
     logout_cruiser()
     return make_response({'logged_out': True})
+
+
+@login_required
+@app.route('api/cruisers/list', methods=['POST'])
+def list_cruisers():
+    """ Return a list of cruisers that match the given criteria. """
+    cruisers = []
+    try:
+        req = request.get_json(force=True)
+        filter_by = req.get('filter_by', [])
+        sort_by = req.get('sort_by', [])
+        cruisers = CruiserUtils.get_cruisers_by_criteria(filter_by, sort_by)
+    except Exception as e:
+        print(str(e))
+    return cruisers
