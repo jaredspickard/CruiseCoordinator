@@ -1,3 +1,5 @@
+from operator import ge
+from webbrowser import get
 from flask_login import current_user as current_cruiser
 
 from server.api.models.cruiser_relationship import CruiserRelationship
@@ -14,28 +16,53 @@ PENDING_SECOND_FIRST = 'pending_second_first'
 class CruiserRelationshipUtils:
 
     @staticmethod
+    def get_friend_ids():
+        """ Get ids of cruisers that are friends with the current_cruiser. """
+        # get friends with id<current_cruiser.id
+        first_ids = CruiserRelationshipUtils._get_cruiser_ids(
+            current_cruiser.id, FRIENDS
+        )
+        # get friends with id>current_cruiser.id
+        second_ids = CruiserRelationshipUtils._get_cruiser_ids(
+            current_cruiser.id, FRIENDS, get_first_id=False
+        )
+        return first_ids + second_ids
+
+    @staticmethod
     def get_friend_request_ids():
         """ Get ids of cruisers that have sent friend requests to the current_cruiser. """
         # get first_cruiser_ids that have sent a friend request to current_cruiser
-        requests1 = CruiserRelationship.query.with_entities(
-            CruiserRelationship.first_cruiser_id
-        ).filter_by(
-            second_cruiser_id=current_cruiser.id,
-            type=PENDING_FIRST_SECOND
+        first_ids = CruiserRelationshipUtils._get_cruiser_ids(
+            current_cruiser.id, PENDING_FIRST_SECOND
         )
         # get second_cruiser_ids that have sent a friend request to current_cruiser
-        requests2 = CruiserRelationship.query.with_entities(
-            CruiserRelationship.second_cruiser_id
-        ).filter_by(
-            first_cruiser_id=current_cruiser.id,
-            type=PENDING_SECOND_FIRST
+        second_ids = CruiserRelationshipUtils._get_cruiser_ids(
+            current_cruiser.id, PENDING_SECOND_FIRST, get_first_id=False
         )
-        cruiser_ids = [req.first_cruiser_id for req in requests1] + [req.second_cruiser_id for req in requests2]
-        cruisers_raw = Cruiser.query.filter(
-            Cruiser.id.in_(cruiser_ids)
-        )
-        return [c.serialize() for c in cruisers_raw]
+        return first_ids + second_ids
 
+    @staticmethod
+    def _get_cruiser_ids(cruiser_id, rel_type, get_first_id=True):
+        """ Helper function to get the ids that have the relationship type rel_type with the given cruiser_id.
+        
+        The get_first_id variable is used to determine whether to return first_id or second_id. """
+        # get the first_cruiser_ids where the second_cruiser_id=cruiser_id
+        if get_first_id:
+            relationships = CruiserRelationship.query.with_entities(
+                CruiserRelationship.first_cruiser_id
+            ).filter_by(
+                second_cruiser_id=cruiser_id,
+                type=rel_type
+            ).all()
+            return [rel.first_cruiser_id for rel in relationships]
+        else:          # get the second_cruiser_ids where the first_cruiser_id=cruiser_id
+            relationships = CruiserRelationship.query.with_entities(
+                CruiserRelationship.second_cruiser_id
+            ).filter_by(
+                first_cruiser_id=cruiser_id,
+                type=rel_type
+            ).all()
+            return [rel.second_cruiser_id for rel in relationships]
 
     @staticmethod
     def send_friend_request(cruiser_id):

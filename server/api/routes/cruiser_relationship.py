@@ -4,9 +4,38 @@ from flask_login import (
 )
 
 from server.api.utils.cruiser_relationship import CruiserRelationshipUtils
-# from server.api.utils.cruiser import CruiserUtils
+from server.api.utils.cruiser import CruiserUtils
 
 from app import app
+
+
+@login_required
+@app.route('/api/friends/list', methods=['GET'])
+def list_friends():
+    """ List the current_cruisers friends. """
+    try:
+        # get ids of cruisers that have sent a friend request to current_cruiser 
+        cruiser_ids = CruiserRelationshipUtils.get_friend_ids()
+        # get list of cruisers for the above ids
+        friends = CruiserUtils.get_cruisers(cruiser_ids)
+    except Exception as e:
+        print(str(e))
+        friends = []
+    return make_response({'friends': friends})
+
+
+@login_required
+@app.route('/api/friends/remove', methods=['POST'])
+def remove_friend():
+    """ Remove a Cruiser from the current_cruisers friends. """
+    try:
+        req = request.get_json(force=True)
+        cruiser_id = req.get('cruiser_id')
+        success = CruiserRelationshipUtils.remove_friend(cruiser_id)
+    except Exception as e:
+        print(str(e))
+        success = False
+    return make_response({'success': success})
 
 
 @login_required
@@ -19,10 +48,10 @@ def list_friend_requests():
         # get ids of cruisers that have sent a friend request to current_cruiser 
         cruiser_ids = CruiserRelationshipUtils.get_friend_request_ids()
         # get list of cruisers for the above ids
-        # cruisers = CruiserUtils.get_cruisers(cruiser_ids)
+        friend_requests = CruiserUtils.get_cruisers(cruiser_ids)
     except Exception as e:
         print(str(e))
-    return cruiser_ids
+    return make_response({'friend_requests': friend_requests})
 
 
 @login_required
@@ -61,20 +90,6 @@ def decline_friend_request():
         req = request.get_json(force=True)
         cruiser_id = req.get('cruiser_id')
         success = CruiserRelationshipUtils.accept_friend_request(cruiser_id)
-    except Exception as e:
-        print(str(e))
-        success = False
-    return make_response({'success': success})
-
-
-@login_required
-@app.route('/api/friends/remove', methods=['POST'])
-def remove_friend():
-    """ Remove a Cruiser from your friends. """
-    try:
-        req = request.get_json(force=True)
-        cruiser_id = req.get('cruiser_id')
-        success = CruiserRelationshipUtils.remove_friend(cruiser_id)
     except Exception as e:
         print(str(e))
         success = False
