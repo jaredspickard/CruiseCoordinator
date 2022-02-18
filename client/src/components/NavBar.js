@@ -91,6 +91,9 @@ const NavBar = () => {
                             <MenuItem key="about_page" onClick={handleCloseNavMenu} component={Link} to="/about">
                                 <Typography textAlign="center">About</Typography>
                             </MenuItem>
+                            <MenuItem key="friends_page" onClick={handleCloseNavMenu} component={Link} to="/friends">
+                                <Typography textAlign="center">Friends</Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
                     <Typography
@@ -105,6 +108,7 @@ const NavBar = () => {
                         <Button key="dashboard_page" component={Link} to="/dashboard" sx={{ my: 2, color: 'white', display: 'block' }}>Dashboard</Button>
                         <Button key="trips_page" component={Link} to="/trips" sx={{ my: 2, color: 'white', display: 'block' }}>Trips</Button>
                         <Button key="about_page" component={Link} to="/about" sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
+                        <Button key="friends_page" component={Link} to="/friends" sx={{ my: 2, color: 'white', display: 'block' }}>Friends</Button>
                     </Box>
 
                     {authed ? (
