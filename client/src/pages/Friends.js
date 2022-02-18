@@ -1,5 +1,5 @@
 import React from 'react';
-import FriendsTabsPanel from '../components/FriendsTabsPanel';
+import FriendsTabsPanel from '../components/friends/FriendsTabsPanel';
 
 class Friends extends React.Component {
     render() {
