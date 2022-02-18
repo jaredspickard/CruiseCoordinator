@@ -6,11 +6,11 @@ from flask_login import (
 from server.api.utils.cruiser_relationship import CruiserRelationshipUtils
 from server.api.utils.cruiser import CruiserUtils
 
-from app import app
+from app import routes_bp
 
 
 @login_required
-@app.route('/api/friends/list', methods=['GET'])
+@routes_bp.route('/friends/list', methods=['GET'])
 def list_friends():
     """ List the current_cruisers friends. """
     try:
@@ -25,7 +25,7 @@ def list_friends():
 
 
 @login_required
-@app.route('/api/friends/remove', methods=['POST'])
+@routes_bp.route('/friends/remove', methods=['POST'])
 def remove_friend():
     """ Remove a Cruiser from the current_cruisers friends. """
     try:
@@ -39,7 +39,7 @@ def remove_friend():
 
 
 @login_required
-@app.route('/api/friends/requests/list', methods=['GET'])
+@routes_bp.route('/friends/requests/list', methods=['GET'])
 def list_friend_requests():
     """ List friend requests for the current_cruiser. """
     # TODO: return the cruisers, not just the ids (look into blueprints)
@@ -55,7 +55,7 @@ def list_friend_requests():
 
 
 @login_required
-@app.route('/api/friends/requests/send', methods=['POST'])
+@routes_bp.route('/friends/requests/send', methods=['POST'])
 def send_friend_request():
     """ Send a friend request to another Cruiser. """
     try:
@@ -69,7 +69,7 @@ def send_friend_request():
 
 
 @login_required
-@app.route('/api/friends/requests/accept', methods=['POST'])
+@routes_bp.route('/friends/requests/accept', methods=['POST'])
 def accept_friend_request():
     """ Accept a friend request from another Cruiser. """
     try:
@@ -83,7 +83,7 @@ def accept_friend_request():
 
 
 @login_required
-@app.route('/api/friends/requests/decline', methods=['POST'])
+@routes_bp.route('/friends/requests/decline', methods=['POST'])
 def decline_friend_request():
     """ Decline a friend request from another Cruiser. """
     try:

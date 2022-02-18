@@ -7,10 +7,10 @@ from flask_login import (
 
 from server.api.utils.cruiser import CruiserUtils
 
-from app import app
+from app import routes_bp
 
 
-@app.route('/api/register', methods=['POST'])
+@routes_bp.route('/register', methods=['POST'])
 def register():
     """ Register a new Cruiser Account without an external account. """
     try:
@@ -24,7 +24,7 @@ def register():
     return make_response({'success': success})
 
 
-@app.route('/api/login', methods=['POST'])
+@routes_bp.route('/login', methods=['POST'])
 def login():
     """ Log the cruiser in through their email. """
     try:
@@ -38,19 +38,19 @@ def login():
     return make_response({'success': success})
 
 
-@app.route('/api/auth', methods=['GET'])
+@routes_bp.route('/auth', methods=['GET'])
 def check_auth():
     return make_response({'authenticated': current_cruiser.is_authenticated})
 
 
-@app.route('/api/logout', methods=['GET'])
+@routes_bp.route('/logout', methods=['GET'])
 def logout():
     logout_cruiser()
     return make_response({'logged_out': True})
 
 
 @login_required
-@app.route('api/cruisers/list', methods=['POST'])
+@routes_bp.route('/cruisers/list', methods=['POST'])
 def list_cruisers():
     """ Return a list of cruisers that match the given criteria. """
     cruisers = []

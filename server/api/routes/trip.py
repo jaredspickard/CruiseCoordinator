@@ -7,10 +7,10 @@ from flask_login import (
 
 from server.api.utils.trip import TripUtils
 
-from app import app
+from app import routes_bp
 
 
-@app.route('/api/trips/list', methods=['GET'])
+@routes_bp.route('/trips/list', methods=['GET'])
 @login_required
 def list_trips():
     """ API to list the trips for the logged-in cruiser. """
@@ -22,7 +22,7 @@ def list_trips():
     return make_response({'trips': trips})
 
 
-@app.route('/api/trips/create', methods=['POST'])
+@routes_bp.route('/trips/create', methods=['POST'])
 @login_required
 def create_trip():
     try:
@@ -37,7 +37,7 @@ def create_trip():
     return ret, 200
 
 
-@app.route('/api/trips/update', methods=['POST'])
+@routes_bp.route('/trips/update', methods=['POST'])
 @login_required
 def update_trip():
     try:
@@ -50,7 +50,7 @@ def update_trip():
     return make_response({'trip': {}})
 
 
-@app.route('/api/trips/delete', methods=['DELETE'])
+@routes_bp.route('/trips/delete', methods=['DELETE'])
 @login_required
 def delete_trip():
     try:
