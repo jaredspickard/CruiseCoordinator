@@ -29,6 +29,11 @@ from server.api.models.trip_vehicle import *
 from server.api.models.trip import *
 
 
+@login.user_loader
+def load_user(id):
+    return Cruiser.query.get(int(id))
+
+
 @app.route("/", defaults={'path':''})
 def serve(path):
     return send_from_directory(app.static_folder,'index.html')

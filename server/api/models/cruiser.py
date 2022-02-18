@@ -1,7 +1,7 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import db, login
+from app import db
 
 
 class Cruiser(UserMixin, db.Model):
@@ -29,8 +29,3 @@ class Cruiser(UserMixin, db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name
         }
-
-
-@login.user_loader
-def load_user(id):
-    return Cruiser.query.get(int(id))
