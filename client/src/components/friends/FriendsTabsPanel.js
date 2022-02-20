@@ -65,7 +65,6 @@ export default function FriendsTabsPanel() {
       </Tabs>
       <TabPanel value={value} index={0}>
         <FriendRequestCard />
-        <FriendRequestCard />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Friends
