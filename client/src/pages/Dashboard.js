@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Container } from '@mui/material';
 
 class Dashboard extends React.Component {
 
@@ -9,9 +9,9 @@ class Dashboard extends React.Component {
 
     render() {
         return (
-            <div>
+            <Container maxWidth="xl">
                 <h2>Dashboard Page</h2>
-            </div>
+            </Container>
         )
     }
 }

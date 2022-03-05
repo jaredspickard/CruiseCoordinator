@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import FriendRequestCard from './FriendRequestCard';
+import FriendRequestCardList from './FriendRequestCardList';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,7 +64,7 @@ export default function FriendsTabsPanel() {
         <Tab label="Blocked" {...a11yProps(3)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <FriendRequestCard  email="jaredspickard@gmail.com" username="jaredspickard" />
+        <FriendRequestCardList />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Friends

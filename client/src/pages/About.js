@@ -1,11 +1,12 @@
 import React from 'react';
+import { Container } from '@mui/material';
 
 class About extends React.Component {
     render() {
         return (
-            <div>
+            <Container maxWidth="xl">
                 <h2>About Page</h2>
-            </div>
+            </Container>
         )
     }
 }

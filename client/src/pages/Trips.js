@@ -4,6 +4,7 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
 import TripList from '../components/TripList';
+import { Container } from '@mui/material';
 
 export default function Trips() {
 
@@ -30,7 +31,7 @@ export default function Trips() {
     }
 
     return (
-        <div>
+        <Container maxWidth="xl">
             <h2>Trips Page</h2>
             <FormControl variant="standard">
                 <InputLabel htmlFor="component-simple">TripName</InputLabel>
@@ -38,6 +39,6 @@ export default function Trips() {
             </FormControl>
             <Button onClick={handleTripCreation}>Create Trip</Button>
             <TripList />
-        </div>
+        </Container>
     )
 }

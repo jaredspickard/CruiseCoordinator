@@ -1,11 +1,12 @@
+import { Container } from '@mui/material';
 import React from 'react';
 
 class Profile extends React.Component {
     render() {
         return (
-            <div>
+            <Container maxWidth="xl">
                 <h2>Profile Page</h2>
-            </div>
+            </Container>
         )
     }
 }
