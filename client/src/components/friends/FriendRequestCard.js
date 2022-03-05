@@ -9,15 +9,15 @@ import Gravatar from 'react-gravatar';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
-export default function FriendRequestCard() {
+export default function FriendRequestCard(props) {
     return (
         <Card sx={{ width: 250 }}>
             <CardMedia align='center'>
-                <Gravatar email="jaredspickard@gmail.com" size={225} />
+                <Gravatar email={props.email} size={225} />
             </CardMedia>
             <CardContent>
                 <Typography variant="h6" component="div" align='center' noWrap='true'>
-                    jaredspickard
+                    {props.username}
                 </Typography>
             </CardContent>
             <CardActions>

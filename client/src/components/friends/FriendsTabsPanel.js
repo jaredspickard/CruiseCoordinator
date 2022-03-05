@@ -64,7 +64,7 @@ export default function FriendsTabsPanel() {
         <Tab label="Blocked" {...a11yProps(3)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <FriendRequestCard />
+        <FriendRequestCard  email="jaredspickard@gmail.com" username="jaredspickard" />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Friends
